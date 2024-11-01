@@ -20,10 +20,11 @@ function App() {
 
   //useState의 변수를 바꾸고싶을땐 set~의 변수함수를 사용하자.
   //state가 array나 object이면 수정하고싶다면 독립적 카피본을 만들어서 수정해야함!!!!(복사부터해라!)
-  let [like, setLike] = useState([0, 0, 0]);
+  let [like, setLike] = useState(Array(title.length).fill(0));
   let [num, setNum] = useState(0);
   let [modal, setModal] = useState(false);
   let [detail, setDetail] = useState(0);
+  let [data, setData] = useState("");
 
   //function을 arrow function으로 바꾸자
   //function like(){} 를 바꾸면 like=()=>{}
@@ -69,7 +70,7 @@ function App() {
 
       {/* <h4>{post}</h4> 변수 호출할 땐 {} 안에 쓰기 */}
 
-      <div className="list">
+      {/* <div className="list">
         <h4 onClick={() => openModal()}>
           {title[0]}
           <span
@@ -90,7 +91,7 @@ function App() {
       <div className="list">
         <h4>{title[2]}</h4>
         <p>10월 23일 발행</p>
-      </div>
+      </div> */}
 
       {title.map((a, i) => {
         return (
@@ -102,21 +103,50 @@ function App() {
               }}
             >
               {a}
+              <span
+                onClick={(e) => {
+                  const newLike = [...like];
+                  newLike[i] += 1;
+                  setLike(newLike);
+                  e.stopPropagation();
+                }}
+              >
+                ❤
+              </span>{" "}
+              {like[i]}
             </h4>
-            <span
+            <p>10월 23일 발행</p>
+            <button
               onClick={() => {
-                const newLike = [...like];
-                newLike[i] += 1;
-                setLike(newLike);
+                //삭제도 배열내용을 변경하는거라 깊은복사 해야한다..
+                const newTitle = [...title];
+                newTitle.splice(i,1);
+                setTitle(newTitle);
               }}
             >
-              ❤
-            </span>{" "}
-            {like[i]}
-            <p>10월 23일 발행</p>
+              삭제
+            </button>
           </div>
         );
       })}
+
+      {/* state 변경함수는 늦게처리됨(비동기처리) */}
+      <input
+        onChange={(e) => {
+          setData(e.target.value);
+        }}
+      ></input>
+      <button
+        onClick={() => {
+          const newTitle = [...title];
+          newTitle.push(data);
+          setTitle(newTitle);
+          setLike([...like, 0]);
+        }}
+      >
+        글 발행
+      </button>
+
       {/* map으로 title 배열 불러오기
         title.map((a, i) => (
         <div className="list">
