@@ -120,7 +120,7 @@ function App() {
               onClick={() => {
                 //삭제도 배열내용을 변경하는거라 깊은복사 해야한다..
                 const newTitle = [...title];
-                newTitle.splice(i,1);
+                newTitle.splice(i, 1);
                 setTitle(newTitle);
               }}
             >
